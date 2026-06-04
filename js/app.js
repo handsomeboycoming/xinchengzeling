@@ -23,15 +23,18 @@
     cacheDom();
     initGlobalEvents();
 
-    // 检查是否已有登录会话
-    const { data: { session } } = await supabase.auth.getSession();
+    // 先显示登录页并绑定事件（无论后端状态如何）
+    showLockScreen(false);
 
-    if (session) {
-      // 已登录，直接进入
-      unlockApp();
-    } else {
-      // 未登录，显示登录页
-      showLockScreen(false);
+    // 检查是否已有登录会话
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session) {
+        unlockApp();
+      }
+    } catch (err) {
+      console.warn('Supabase 连接中，请先登录:', err.message);
+      // 连接失败时保持在登录页面，用户可以手动登录
     }
 
     // 监听认证状态变化
