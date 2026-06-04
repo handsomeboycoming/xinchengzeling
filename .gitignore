@@ -1,0 +1,5 @@
+# Supabase 配置（包含敏感 key，不要提交公共仓库）
+# js/supabase.js  - 如果仓库是私有的可以提交，公开的请加入 .gitignore
+
+.DS_Store
+Thumbs.db

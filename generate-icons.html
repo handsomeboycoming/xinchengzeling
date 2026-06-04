@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><title>生成图标 - 欣成则灵</title>
+<style>body{font-family:sans-serif;display:flex;flex-direction:column;align-items:center;padding:40px;background:#faf5f7}
+canvas{border:2px dashed #e91e63;margin:10px;border-radius:16px}
+button{background:#e91e63;color:#fff;border:none;padding:12px 24px;border-radius:25px;font-size:1rem;cursor:pointer;margin:8px}
+.downloads{display:flex;gap:20px;flex-wrap:wrap;justify-content:center}</style></head>
+<body>
+<h2>💕 欣成则灵 - 图标生成器</h2>
+<p>点击下载按钮保存到 <code>assets/icons/</code> 目录</p>
+<div class="downloads">
+<div style="text-align:center"><canvas id="c192" width="192" height="192"></canvas><br><button onclick="download('c192','icon-192.png')">下载 192x192</button></div>
+<div style="text-align:center"><canvas id="c512" width="512" height="512"></canvas><br><button onclick="download('c512','icon-512.png')">下载 512x512</button></div>
+</div>
+<script>
+function drawIcon(canvasId) {
+  const c = document.getElementById(canvasId);
+  const x = c.getContext('2d');
+  const s = c.width;
+  // 背景渐变
+  const grad = x.createLinearGradient(0, 0, s, s);
+  grad.addColorStop(0, '#f06292');
+  grad.addColorStop(1, '#e91e63');
+  x.fillStyle = grad;
+  x.beginPath(); x.arc(s/2, s/2, s*0.45, 0, Math.PI*2); x.fill();
+  // 爱心文字
+  x.fillStyle = '#fff';
+  x.font = `bold ${s*0.35}px sans-serif`;
+  x.textAlign = 'center';
+  x.fillText('💕', s/2, s/2 + s*0.12);
+}
+function download(canvasId, filename) {
+  const c = document.getElementById(canvasId);
+  c.toBlob(b => {
+    const a = document.createElement('a');
+    a.download = filename;
+    a.href = URL.createObjectURL(b);
+    a.click();
+  });
+}
+drawIcon('c192'); drawIcon('c512');
+</script>
+</body></html>

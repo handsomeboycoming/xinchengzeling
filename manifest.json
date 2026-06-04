@@ -1,0 +1,26 @@
+{
+  "name": "欣成则灵 - 情侣生活记录",
+  "short_name": "欣成则灵",
+  "description": "属于我们的情侣生活记录",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#faf5f7",
+  "theme_color": "#e91e63",
+  "icons": [
+    {
+      "src": "assets/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "assets/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "lang": "zh-CN"
+}

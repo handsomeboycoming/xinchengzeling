@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>欣成则灵 - 情侣生活记录</title>
+
+  <!-- PWA Meta -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="欣成则灵">
+  <meta name="theme-color" content="#e91e63">
+  <meta name="description" content="欣成则灵 - 属于我们的情侣生活记录">
+
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="manifest.json">
+
+  <!-- Apple Touch Icon -->
+  <link rel="apple-touch-icon" href="assets/icons/icon-192.png">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💕</text></svg>">
+</head>
+<body>
+
+  <!-- ==================== 登录/注册 ==================== -->
+  <div id="lock-screen" class="lock-screen">
+    <div class="lock-card">
+      <div class="lock-icon">💕</div>
+      <h2 id="lock-title">欣成则灵</h2>
+      <p id="lock-subtitle">登录你们的秘密基地</p>
+      <div class="lock-input-group" style="flex-direction:column;gap:10px">
+        <input type="email" id="lock-email" placeholder="邮箱（注册时需要）" style="width:100%;border-radius:25px;padding:12px 18px">
+        <input type="password" id="lock-password" placeholder="密码（至少6位）" maxlength="50" style="width:100%;border-radius:25px;padding:12px 18px">
+      </div>
+      <button id="lock-submit" class="btn btn-primary" style="width:100%;margin-top:12px;justify-content:center">🔓 登录</button>
+      <p id="lock-error" class="lock-error hidden"></p>
+      <p id="lock-toggle" class="lock-hint">没有账号？<a href="#">注册新账号</a></p>
+    </div>
+  </div>
+
+  <!-- ==================== 主应用 ==================== -->
+  <div id="app" class="app hidden">
+    <header class="header">
+      <div class="header-inner">
+        <div class="logo">💕 欣成则灵</div>
+        <button class="menu-toggle" id="menu-toggle" aria-label="菜单">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+      <nav class="nav" id="main-nav">
+        <a href="#home" class="nav-item active" data-route="home">
+          <span class="nav-icon">🏠</span><span class="nav-text">首页</span>
+        </a>
+        <a href="#memories" class="nav-item" data-route="memories">
+          <span class="nav-icon">📸</span><span class="nav-text">回忆录</span>
+        </a>
+        <a href="#dates" class="nav-item" data-route="dates">
+          <span class="nav-icon">📅</span><span class="nav-text">重要日子</span>
+        </a>
+        <a href="#plans" class="nav-item" data-route="plans">
+          <span class="nav-icon">🎯</span><span class="nav-text">人生规划</span>
+        </a>
+        <a href="#notes" class="nav-item" data-route="notes">
+          <span class="nav-icon">💌</span><span class="nav-text">情书留言</span>
+        </a>
+        <a href="#wishlist" class="nav-item" data-route="wishlist">
+          <span class="nav-icon">✨</span><span class="nav-text">愿望清单</span>
+        </a>
+        <a href="#settings" class="nav-item" data-route="settings">
+          <span class="nav-icon">⚙️</span><span class="nav-text">设置</span>
+        </a>
+      </nav>
+    </header>
+
+    <main class="main">
+      <section id="page-home" class="page active"><div class="page-content home-content"></div></section>
+      <section id="page-memories" class="page"><div class="page-content memories-content"></div></section>
+      <section id="page-dates" class="page"><div class="page-content dates-content"></div></section>
+      <section id="page-plans" class="page"><div class="page-content plans-content"></div></section>
+      <section id="page-notes" class="page"><div class="page-content notes-content"></div></section>
+      <section id="page-wishlist" class="page"><div class="page-content wishlist-content"></div></section>
+      <section id="page-settings" class="page"><div class="page-content settings-content"></div></section>
+    </main>
+
+    <footer class="footer">
+      <p>💕 欣成则灵 · 永远在一起 💕</p>
+    </footer>
+  </div>
+
+  <!-- 弹窗 -->
+  <div id="modal-overlay" class="modal-overlay hidden">
+    <div class="modal" id="modal-container">
+      <button class="modal-close" id="modal-close">&times;</button>
+      <div class="modal-body" id="modal-body"></div>
+    </div>
+  </div>
+
+  <!-- 灯箱 -->
+  <div id="lightbox" class="lightbox hidden">
+    <button class="lightbox-close">&times;</button>
+    <button class="lightbox-prev">&lsaquo;</button>
+    <img id="lightbox-img" src="" alt="">
+    <button class="lightbox-next">&rsaquo;</button>
+  </div>
+
+  <!-- Toast -->
+  <div id="toast" class="toast hidden"></div>
+
+  <!-- Supabase SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <!-- App Scripts -->
+  <script src="js/supabase.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/sync.js"></script>
+  <script src="js/pages/home.js"></script>
+  <script src="js/pages/memories.js"></script>
+  <script src="js/pages/dates.js"></script>
+  <script src="js/pages/plans.js"></script>
+  <script src="js/pages/notes.js"></script>
+  <script src="js/pages/wishlist.js"></script>
+  <script src="js/app.js"></script>
+
+  <!-- Register Service Worker -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js').catch(() => {});
+    }
+  </script>
+</body>
+</html>
