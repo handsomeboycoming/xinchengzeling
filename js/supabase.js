@@ -8,15 +8,27 @@
 const SUPABASE_URL = 'https://fdjeqaieqymdkwptkqhy.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_HW9dQjAtC-35pq6l0SF8Sw_qpV3cGUP';
 
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
-  auth: {
-    persistSession: true,       // 记住登录状态
-    autoRefreshToken: true,     // 自动刷新 token
-    detectSessionInUrl: true,   // 支持 OAuth 回调
-  },
-  realtime: {
-    params: {
-      eventsPerSecond: 10,
-    },
-  },
-});
+// 创建 Supabase 客户端
+const supabase = (() => {
+  if (!window.supabase) {
+    console.error('❌ Supabase SDK 未加载，请检查网络连接');
+    return null;
+  }
+  try {
+    const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+      auth: {
+        persistSession: true,
+        autoRefreshToken: true,
+        detectSessionInUrl: true,
+      },
+      realtime: {
+        params: { eventsPerSecond: 10 },
+      },
+    });
+    console.log('✅ Supabase 客户端初始化成功');
+    return client;
+  } catch (e) {
+    console.error('❌ Supabase 初始化失败:', e.message);
+    return null;
+  }
+})();

@@ -4,34 +4,42 @@
    ============================================================ */
 
 const DB = (() => {
+  // 安全获取 supabase 实例
+  function sb() {
+    if (!supabase || !supabase.auth) {
+      throw new Error('Supabase 客户端未初始化，请检查 js/supabase.js 配置');
+    }
+    return supabase;
+  }
+
   // 获取当前登录用户 ID
   function userId() {
-    return supabase.auth.user()?.id;
+    return sb().auth.user()?.id;
   }
 
   // === 认证相关 ===
   async function signUp(email, password) {
-    const { data, error } = await supabase.auth.signUp({ email, password });
+    const { data, error } = await sb().auth.signUp({ email, password });
     if (error) throw error;
     return data;
   }
 
   async function signIn(email, password) {
-    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+    const { data, error } = await sb().auth.signInWithPassword({ email, password });
     if (error) throw error;
     return data;
   }
 
   async function signOut() {
-    await supabase.auth.signOut();
+    await sb().auth.signOut();
   }
 
   function getUser() {
-    return supabase.auth.user();
+    return sb().auth.user();
   }
 
   function onAuthChange(callback) {
-    return supabase.auth.onAuthStateChange(callback);
+    return sb().auth.onAuthStateChange(callback);
   }
 
   // === 设置 (Profiles) ===
@@ -134,10 +142,10 @@ const DB = (() => {
     // 全量替换：先删后插
     const uid = userId();
     if (!uid) return;
-    await supabase.from('important_dates').delete().eq('user_id', uid);
+    await sb().from('important_dates').delete().eq('user_id', uid);
     if (dates.length === 0) return;
     const rows = dates.map(d => dateToRow(d, uid));
-    const { error } = await supabase.from('important_dates').insert(rows);
+    const { error } = await sb().from('important_dates').insert(rows);
     if (error) throw error;
   }
 
@@ -157,10 +165,10 @@ const DB = (() => {
   async function savePeriodRecords(records) {
     const uid = userId();
     if (!uid) return;
-    await supabase.from('period_records').delete().eq('user_id', uid);
+    await sb().from('period_records').delete().eq('user_id', uid);
     if (records.length === 0) return;
     const rows = records.map(r => periodToRow(r, uid));
-    const { error } = await supabase.from('period_records').insert(rows);
+    const { error } = await sb().from('period_records').insert(rows);
     if (error) throw error;
   }
 
@@ -180,10 +188,10 @@ const DB = (() => {
   async function savePlans(plans) {
     const uid = userId();
     if (!uid) return;
-    await supabase.from('plans').delete().eq('user_id', uid);
+    await sb().from('plans').delete().eq('user_id', uid);
     if (plans.length === 0) return;
     const rows = plans.map(p => planToRow(p, uid));
-    const { error } = await supabase.from('plans').insert(rows);
+    const { error } = await sb().from('plans').insert(rows);
     if (error) throw error;
   }
 
@@ -203,10 +211,10 @@ const DB = (() => {
   async function saveNotes(notes) {
     const uid = userId();
     if (!uid) return;
-    await supabase.from('notes').delete().eq('user_id', uid);
+    await sb().from('notes').delete().eq('user_id', uid);
     if (notes.length === 0) return;
     const rows = notes.map(n => noteToRow(n, uid));
-    const { error } = await supabase.from('notes').insert(rows);
+    const { error } = await sb().from('notes').insert(rows);
     if (error) throw error;
   }
 
@@ -226,10 +234,10 @@ const DB = (() => {
   async function saveWishlist(items) {
     const uid = userId();
     if (!uid) return;
-    await supabase.from('wishlist').delete().eq('user_id', uid);
+    await sb().from('wishlist').delete().eq('user_id', uid);
     if (items.length === 0) return;
     const rows = items.map(w => wishToRow(w, uid));
-    const { error } = await supabase.from('wishlist').insert(rows);
+    const { error } = await sb().from('wishlist').insert(rows);
     if (error) throw error;
   }
 
@@ -241,7 +249,7 @@ const DB = (() => {
     const ext = file.name.split('.').pop() || 'jpg';
     const fileName = `${uid}/${Date.now()}-${Math.random().toString(36).slice(2, 6)}.${ext}`;
 
-    const { data, error } = await supabase.storage
+    const { data, error } = await sb().storage
       .from('photos')
       .upload(fileName, file, {
         cacheControl: '3600',
@@ -251,7 +259,7 @@ const DB = (() => {
     if (error) throw error;
 
     // 获取公开 URL
-    const { data: urlData } = supabase.storage
+    const { data: urlData } = sb().storage
       .from('photos')
       .getPublicUrl(data.path);
 
@@ -274,7 +282,7 @@ const DB = (() => {
     const ext = mime.split('/')[1] || 'jpg';
     const filePath = `${uid}/${Date.now()}-${fileName || 'photo'}.${ext}`;
 
-    const { data, error } = await supabase.storage
+    const { data, error } = await sb().storage
       .from('photos')
       .upload(filePath, blob, {
         cacheControl: '3600',
@@ -283,7 +291,7 @@ const DB = (() => {
 
     if (error) throw error;
 
-    const { data: urlData } = supabase.storage
+    const { data: urlData } = sb().storage
       .from('photos')
       .getPublicUrl(data.path);
 
@@ -296,7 +304,7 @@ const DB = (() => {
       const urlObj = new URL(url);
       const pathMatch = urlObj.pathname.match(/\/storage\/v1\/object\/public\/photos\/(.+)/);
       if (pathMatch) {
-        await supabase.storage.from('photos').remove([pathMatch[1]]);
+        await sb().storage.from('photos').remove([pathMatch[1]]);
       }
     } catch (e) {
       console.warn('无法删除照片:', e);

@@ -8,6 +8,11 @@ const Sync = (() => {
   const channels = {};
   const listeners = {};
 
+  function s() {
+    if (!supabase) throw new Error('Supabase 未初始化');
+    return supabase;
+  }
+
   // 初始化所有表的实时订阅
   function initAll(onChange) {
     // 监听所有表
@@ -88,7 +93,7 @@ const Sync = (() => {
   // 清理所有订阅
   function cleanup() {
     Object.values(channels).forEach(ch => {
-      supabase.removeChannel(ch);
+      s().removeChannel(ch);
     });
   }
 
