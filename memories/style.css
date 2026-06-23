@@ -67,6 +67,161 @@ body {
 }
 
 /* ============================================
+   密码锁屏
+   ============================================ */
+.password-screen {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background:
+        radial-gradient(ellipse at 50% 40%, rgba(196, 149, 106, 0.2) 0%, transparent 70%),
+        linear-gradient(180deg, #f5e6d3 0%, #eed9c0 50%, #e8d0b0 100%);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.password-screen.hidden {
+    opacity: 0;
+    transform: scale(1.05);
+    pointer-events: none;
+}
+
+.password-overlay {
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(ellipse at 50% 50%, transparent 30%, rgba(44, 24, 16, 0.12) 100%);
+    pointer-events: none;
+}
+
+.password-card {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    padding: 40px 30px;
+    max-width: 360px;
+    width: 90%;
+}
+
+.password-icon {
+    font-size: 3rem;
+    margin-bottom: 16px;
+    animation: lock-float 3s ease-in-out infinite;
+}
+
+@keyframes lock-float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+}
+
+.password-title {
+    font-family: var(--font-title);
+    font-size: 1.5rem;
+    color: var(--deep-brown);
+    margin-bottom: 8px;
+    letter-spacing: 0.06em;
+}
+
+.password-hint {
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    color: var(--sepia);
+    margin-bottom: 28px;
+    opacity: 0.8;
+}
+
+.password-input-group {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    background: rgba(255, 255, 255, 0.6);
+    border: 2px solid var(--warm-tan);
+    border-radius: 30px;
+    overflow: hidden;
+    box-shadow: var(--shadow-soft);
+    transition: all var(--transition-medium);
+}
+
+.password-input-group:focus-within {
+    border-color: var(--deep-brown);
+    box-shadow: var(--shadow-card);
+}
+
+.password-input {
+    flex: 1;
+    padding: 14px 18px;
+    border: none;
+    background: transparent;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    color: var(--deep-brown);
+    outline: none;
+    letter-spacing: 0.1em;
+    min-width: 0;
+}
+
+.password-input::placeholder {
+    color: var(--warm-tan);
+    opacity: 0.6;
+    letter-spacing: 0.05em;
+}
+
+.password-submit {
+    width: 48px;
+    height: 48px;
+    flex-shrink: 0;
+    border: none;
+    background: linear-gradient(135deg, var(--deep-brown), var(--dark-brown));
+    color: var(--cream);
+    font-size: 1.3rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all var(--transition-medium);
+}
+
+.password-submit:hover {
+    background: linear-gradient(135deg, #3a2518, var(--deep-brown));
+}
+
+.password-submit:active {
+    transform: scale(0.95);
+}
+
+.password-error {
+    font-family: var(--font-body);
+    font-size: 0.8rem;
+    color: var(--vintage-red);
+    margin-top: 12px;
+    min-height: 20px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.password-error.show {
+    opacity: 1;
+}
+
+/* 密码输入抖动动画 */
+.password-input-group.shake {
+    animation: shake 0.5s ease;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    15% { transform: translateX(-8px); }
+    30% { transform: translateX(8px); }
+    45% { transform: translateX(-6px); }
+    60% { transform: translateX(6px); }
+    75% { transform: translateX(-3px); }
+    90% { transform: translateX(3px); }
+}
+
+/* ============================================
    封面页
    ============================================ */
 .cover {

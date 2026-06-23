@@ -6,6 +6,11 @@
     'use strict';
 
     // --- DOM 引用 ---
+    const passwordScreen = document.getElementById('password-screen');
+    const passwordInput = document.getElementById('password-input');
+    const passwordSubmit = document.getElementById('password-submit');
+    const passwordError = document.getElementById('password-error');
+    const passwordInputGroup = passwordSubmit?.parentElement;
     const cover = document.getElementById('cover');
     const coverTitle = document.getElementById('cover-title');
     const coverSubtitle = document.getElementById('cover-subtitle');
@@ -20,7 +25,7 @@
 
     let memoriesData = [];
     let musicPlaying = false;
-    let dataLoaded = false;
+    let appPassword = '';
 
     // ============================================
     // 数据加载
@@ -231,11 +236,69 @@
 
     enterBtn.addEventListener('click', enterMemories);
 
-    // 键盘 Enter 键也可以进入
+    // 键盘 Enter 键 — 优先处理密码页
     document.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' && !cover.classList.contains('hidden')) {
+        if (e.key !== 'Enter') return;
+
+        // 密码页还在 → 提交密码
+        if (!passwordScreen.classList.contains('hidden')) {
+            e.preventDefault();
+            checkPassword();
+            return;
+        }
+
+        // 封面还在 → 进入回忆
+        if (!cover.classList.contains('hidden')) {
             enterMemories();
         }
+    });
+
+    // ============================================
+    // 密码验证
+    // ============================================
+    function checkPassword() {
+        const input = passwordInput.value.trim();
+
+        if (!input) {
+            showPasswordError('请输入密码～');
+            return;
+        }
+
+        if (input !== appPassword) {
+            showPasswordError('密码不对哦，再试试～');
+            // 抖动效果
+            passwordInputGroup.classList.add('shake');
+            setTimeout(() => passwordInputGroup.classList.remove('shake'), 500);
+            passwordInput.value = '';
+            passwordInput.focus();
+            return;
+        }
+
+        // 密码正确 → 记住到会话，隐藏密码页，显示封面
+        sessionStorage.setItem('memories_unlocked', 'true');
+        hidePasswordScreen();
+    }
+
+    function showPasswordError(msg) {
+        passwordError.textContent = msg;
+        passwordError.classList.add('show');
+        setTimeout(() => passwordError.classList.remove('show'), 2000);
+    }
+
+    function hidePasswordScreen() {
+        passwordScreen.classList.add('hidden');
+        // 密码页消失后聚焦封面
+        setTimeout(() => {
+            passwordInput.value = '';
+        }, 600);
+    }
+
+    // 密码提交按钮
+    passwordSubmit.addEventListener('click', checkPassword);
+
+    // 密码输入框实时清空错误
+    passwordInput.addEventListener('input', () => {
+        passwordError.classList.remove('show');
     });
 
     // ============================================
@@ -243,15 +306,28 @@
     // ============================================
     async function init() {
         const data = await loadData();
-        dataLoaded = true;
+
+        // 保存密码（从 data.json 读取）
+        appPassword = data.password || '';
+
         memoriesData = data.memories || [];
 
         initCover(data);
         setupMusic(data);
         renderMemories(memoriesData);
 
-        // 如果 URL hash 是 #memories，直接跳过封面
-        if (window.location.hash === '#memories') {
+        // 如果没有设置密码，跳过密码页
+        if (!appPassword) {
+            hidePasswordScreen();
+        }
+
+        // 如果当前会话已经解锁过，直接跳过密码页
+        if (sessionStorage.getItem('memories_unlocked') === 'true') {
+            hidePasswordScreen();
+        }
+
+        // 如果 URL hash 是 #memories 且已解锁，直接进入
+        if (window.location.hash === '#memories' && sessionStorage.getItem('memories_unlocked') === 'true') {
             setTimeout(enterMemories, 300);
         }
     }

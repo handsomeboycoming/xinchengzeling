@@ -10,6 +10,30 @@
     <!-- 胶片颗粒覆盖层 -->
     <div class="film-grain"></div>
 
+    <!-- ========== 密码锁屏 ========== -->
+    <section class="password-screen" id="password-screen">
+        <div class="password-overlay"></div>
+        <div class="password-card">
+            <div class="password-icon">🔒</div>
+            <h2 class="password-title">这是只属于我们的秘密</h2>
+            <p class="password-hint">输入我们约定的密码，开启回忆</p>
+            <div class="password-input-group">
+                <input
+                    type="password"
+                    id="password-input"
+                    class="password-input"
+                    placeholder="输入密码..."
+                    maxlength="20"
+                    autocomplete="off"
+                >
+                <button class="password-submit" id="password-submit">
+                    <span>→</span>
+                </button>
+            </div>
+            <p class="password-error" id="password-error"></p>
+        </div>
+    </section>
+
     <!-- ========== 封面页 ========== -->
     <section class="cover" id="cover">
         <div class="cover-overlay"></div>
