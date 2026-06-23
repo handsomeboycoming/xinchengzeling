@@ -1,51 +1,55 @@
 /* ============================================
-   复古胶片风回忆录 — 脚本
+   Retro Noir Pro — 复古酷酷回忆录脚本
+   说明：保留原功能，增强高级感、容错性和交互动效。
    ============================================ */
 
 (function () {
     'use strict';
 
+    const $ = (selector) => document.querySelector(selector);
+    const byId = (id) => document.getElementById(id);
+
     // --- DOM 引用 ---
-    const passwordScreen = document.getElementById('password-screen');
-    const passwordInput = document.getElementById('password-input');
-    const passwordSubmit = document.getElementById('password-submit');
-    const passwordError = document.getElementById('password-error');
-    const passwordInputGroup = passwordSubmit?.parentElement;
-    const cover = document.getElementById('cover');
-    const coverTitle = document.getElementById('cover-title');
-    const coverSubtitle = document.getElementById('cover-subtitle');
-    const enterBtn = document.getElementById('enter-btn');
-    const mainContent = document.getElementById('main-content');
-    const timeline = document.getElementById('timeline');
-    const bgMusic = document.getElementById('bg-music');
-    const musicToggle = document.getElementById('music-toggle');
-    const musicInfo = document.getElementById('music-info');
-    const musicTitleEl = musicInfo?.querySelector('.music-title');
-    const musicArtistEl = musicInfo?.querySelector('.music-artist');
+    const passwordScreen = byId('password-screen');
+    const passwordInput = byId('password-input');
+    const passwordSubmit = byId('password-submit');
+    const passwordError = byId('password-error');
+    const passwordInputGroup = passwordSubmit?.parentElement || null;
+    const cover = byId('cover');
+    const coverTitle = byId('cover-title');
+    const coverSubtitle = byId('cover-subtitle');
+    const enterBtn = byId('enter-btn');
+    const mainContent = byId('main-content');
+    const timeline = byId('timeline');
+    const bgMusic = byId('bg-music');
+    const musicToggle = byId('music-toggle');
+    const musicInfo = byId('music-info');
+    const musicTitleEl = musicInfo?.querySelector('.music-title') || null;
+    const musicArtistEl = musicInfo?.querySelector('.music-artist') || null;
 
     let memoriesData = [];
     let musicPlaying = false;
     let appPassword = '';
+    let scrollObserver = null;
 
     // ============================================
     // 数据加载
     // ============================================
     async function loadData() {
         try {
-            const response = await fetch('data.json');
+            const response = await fetch('data.json', { cache: 'no-store' });
             if (!response.ok) throw new Error('data.json 加载失败');
-            const data = await response.json();
-            return data;
+            return await response.json();
         } catch (err) {
             console.error('加载数据出错:', err);
-            // 返回默认数据作为降级方案
+            // 降级数据：更符合复古酷酷风格
             return {
-                coverTitle: '答应我，别再拉黑我了！',
-                coverSubtitle: '— 我们の回忆录 —',
+                coverTitle: '暗房里的我们',
+                coverSubtitle: 'RETRO NOIR MEMORY ARCHIVE',
                 music: {
                     src: 'music/shuqianba-nvhai.mp3',
-                    title: '数钱吧女孩',
-                    artist: '连麻',
+                    title: 'Now Playing',
+                    artist: 'Private Archive',
                 },
                 memories: [],
             };
@@ -56,83 +60,80 @@
     // 初始化封面
     // ============================================
     function initCover(data) {
-        coverTitle.textContent = data.coverTitle || '答应我，别再拉黑我了！';
-        coverSubtitle.textContent = data.coverSubtitle || '— 我们の回忆录 —';
+        if (coverTitle) coverTitle.textContent = data.coverTitle || '暗房里的我们';
+        if (coverSubtitle) coverSubtitle.textContent = data.coverSubtitle || 'RETRO NOIR MEMORY ARCHIVE';
+        document.title = data.pageTitle || data.coverTitle || document.title;
     }
 
     // ============================================
     // 设置音乐
     // ============================================
     function setupMusic(data) {
+        if (!bgMusic) return;
+
         const music = data.music || {};
         const src = music.src || 'music/shuqianba-nvhai.mp3';
+        let source = bgMusic.querySelector('source');
 
-        // 设置音频源
-        const source = bgMusic.querySelector('source');
         if (!source) {
-            const newSource = document.createElement('source');
-            newSource.src = src;
-            newSource.type = 'audio/mpeg';
-            bgMusic.appendChild(newSource);
-        } else {
-            source.src = src;
+            source = document.createElement('source');
+            source.type = 'audio/mpeg';
+            bgMusic.appendChild(source);
         }
+
+        source.src = src;
         bgMusic.load();
 
-        // 显示歌曲信息
-        if (musicTitleEl) musicTitleEl.textContent = music.title || '';
-        if (musicArtistEl) musicArtistEl.textContent = music.artist || '';
+        if (musicTitleEl) musicTitleEl.textContent = music.title || 'Now Playing';
+        if (musicArtistEl) musicArtistEl.textContent = music.artist || 'Private Archive';
     }
 
     // ============================================
     // 音乐控制
     // ============================================
-    function toggleMusic() {
-        if (musicPlaying) {
-            bgMusic.pause();
-            musicToggle.classList.remove('playing');
-            musicToggle.classList.add('paused');
-        } else {
-            // 用户交互后播放
-            bgMusic.play().catch(err => {
-                console.warn('音乐播放失败:', err.message);
-            });
-            musicToggle.classList.remove('paused');
-            musicToggle.classList.add('playing');
-        }
-        musicPlaying = !musicPlaying;
+    function setMusicState(isPlaying) {
+        musicPlaying = isPlaying;
+        if (!musicToggle) return;
+        musicToggle.classList.toggle('playing', isPlaying);
+        musicToggle.classList.toggle('paused', !isPlaying);
+        musicToggle.setAttribute('aria-label', isPlaying ? '暂停音乐' : '播放音乐');
     }
 
-    musicToggle.addEventListener('click', toggleMusic);
+    function toggleMusic() {
+        if (!bgMusic) return;
 
-    // 监听音频实际状态
-    bgMusic.addEventListener('play', () => {
-        musicPlaying = true;
-        musicToggle.classList.remove('paused');
-        musicToggle.classList.add('playing');
-    });
+        if (musicPlaying) {
+            bgMusic.pause();
+            setMusicState(false);
+            return;
+        }
 
-    bgMusic.addEventListener('pause', () => {
-        musicPlaying = false;
-        musicToggle.classList.remove('playing');
-        musicToggle.classList.add('paused');
-    });
+        bgMusic.play()
+            .then(() => setMusicState(true))
+            .catch(err => {
+                console.warn('音乐播放失败:', err.message);
+                setMusicState(false);
+            });
+    }
 
-    bgMusic.addEventListener('ended', () => {
-        musicPlaying = false;
-        musicToggle.classList.remove('playing');
-        musicToggle.classList.add('paused');
-    });
+    if (musicToggle) musicToggle.addEventListener('click', toggleMusic);
+    if (bgMusic) {
+        bgMusic.addEventListener('play', () => setMusicState(true));
+        bgMusic.addEventListener('pause', () => setMusicState(false));
+        bgMusic.addEventListener('ended', () => setMusicState(false));
+    }
 
     // ============================================
     // 渲染回忆卡片
     // ============================================
     function renderMemories(memories) {
+        if (!timeline) return;
+
         if (!memories || memories.length === 0) {
             timeline.innerHTML = `
-                <div style="text-align:center;padding:100px 20px;color:var(--sepia);">
-                    <p style="font-size:1.2rem;">📷</p>
-                    <p>还没有回忆，快去 data.json 里添加吧！</p>
+                <div class="empty-state" style="text-align:center;padding:120px 20px;color:var(--text-muted);">
+                    <p style="font-size:1.4rem;letter-spacing:.25em;">NO RECORD</p>
+                    <p style="margin-top:12px;opacity:.7;">在 data.json 里添加照片和文字，这里会变成你的私人胶片档案。</p>
                 </div>
             `;
             return;
@@ -140,12 +141,12 @@
 
         timeline.innerHTML = memories.map((memory, index) => {
             const imageHtml = memory.image
-                ? `<img src="${escapeHtml(memory.image)}" alt="${escapeHtml(memory.text || '')}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">`
+                ? `<img src="${escapeHtml(memory.image)}" alt="${escapeHtml(memory.text || 'memory photo')}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">`
                 : '';
 
             const placeholderHtml = memory.image
-                ? `<div class="photo-placeholder" style="display:none;">📷</div>`
-                : `<div class="photo-placeholder">📷<br><span style="font-size:0.7rem;">添加照片</span></div>`;
+                ? `<div class="photo-placeholder" style="display:none;">NO IMAGE</div>`
+                : `<div class="photo-placeholder">NO IMAGE<br><span style="font-size:0.62rem;letter-spacing:.18em;">ADD PHOTO</span></div>`;
 
             return `
                 <div class="memory-card" data-index="${index}">
@@ -154,101 +155,100 @@
                         ${placeholderHtml}
                     </div>
                     <div class="memory-text">
-                        <div class="memory-date">${escapeHtml(memory.date || '')}</div>
+                        <div class="memory-date">${escapeHtml(memory.date || 'UNDATED')}</div>
                         <p class="memory-caption">${escapeHtml(memory.text || '')}</p>
                     </div>
                 </div>
             `;
         }).join('');
+
+        decorateMemoryCards();
+    }
+
+    function decorateMemoryCards() {
+        const cards = document.querySelectorAll('.memory-card');
+        cards.forEach((card, index) => {
+            const tilt = index % 2 === 0 ? '-1.8deg' : '1.8deg';
+            card.style.setProperty('--tilt', tilt);
+            card.style.transitionDelay = `${Math.min(index * 60, 300)}ms`;
+        });
     }
 
     function escapeHtml(str) {
         const div = document.createElement('div');
-        div.textContent = str;
+        div.textContent = String(str ?? '');
         return div.innerHTML;
     }
 
     // ============================================
-    // 滚动动画 (Intersection Observer)
+    // 滚动动画
     // ============================================
     function setupScrollReveal() {
         const cards = document.querySelectorAll('.memory-card');
         if (cards.length === 0) return;
 
-        const observer = new IntersectionObserver(
+        if (scrollObserver) scrollObserver.disconnect();
+
+        scrollObserver = new IntersectionObserver(
             (entries) => {
                 entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('revealed');
-                        // 显示后不再观察
-                        observer.unobserve(entry.target);
-                    }
+                    if (!entry.isIntersecting) return;
+                    entry.target.classList.add('revealed');
+                    scrollObserver.unobserve(entry.target);
                 });
             },
             {
-                threshold: 0.2,
-                rootMargin: '0px 0px -50px 0px',
+                threshold: 0.18,
+                rootMargin: '0px 0px -70px 0px',
             }
         );
 
-        cards.forEach(card => observer.observe(card));
+        cards.forEach(card => scrollObserver.observe(card));
 
-        // 初始时立即检查（顶部可见的卡片）
         setTimeout(() => {
             cards.forEach(card => {
                 const rect = card.getBoundingClientRect();
                 if (rect.top < window.innerHeight && rect.bottom > 0) {
                     card.classList.add('revealed');
-                    observer.unobserve(card);
+                    scrollObserver.unobserve(card);
                 }
             });
-        }, 300);
+        }, 220);
     }
 
     // ============================================
     // 封面进入动画
     // ============================================
     function enterMemories() {
-        // 封面滑出
-        cover.classList.add('hidden');
+        if (cover) cover.classList.add('hidden');
+        if (mainContent) mainContent.classList.add('visible');
 
-        // 显示主内容
-        mainContent.classList.add('visible');
-
-        // 开始播放音乐
-        if (!musicPlaying) {
-            bgMusic.play().then(() => {
-                musicPlaying = true;
-                musicToggle.classList.remove('paused');
-                musicToggle.classList.add('playing');
-            }).catch(err => {
-                console.warn('音乐自动播放被浏览器阻止，请手动点击播放:', err.message);
-                musicToggle.classList.add('paused');
-            });
+        if (bgMusic && !musicPlaying) {
+            bgMusic.play()
+                .then(() => setMusicState(true))
+                .catch(err => {
+                    console.warn('音乐自动播放被浏览器阻止，请手动点击播放:', err.message);
+                    setMusicState(false);
+                });
         }
 
-        // 滚动到顶部
         window.scrollTo({ top: 0, behavior: 'smooth' });
-
-        // 延迟设置滚动动画观察
-        setTimeout(setupScrollReveal, 500);
+        setTimeout(setupScrollReveal, 420);
     }
 
-    enterBtn.addEventListener('click', enterMemories);
+    if (enterBtn) enterBtn.addEventListener('click', enterMemories);
 
     // 键盘 Enter 键 — 优先处理密码页
     document.addEventListener('keydown', (e) => {
         if (e.key !== 'Enter') return;
 
-        // 密码页还在 → 提交密码
-        if (!passwordScreen.classList.contains('hidden')) {
+        if (passwordScreen && !passwordScreen.classList.contains('hidden')) {
             e.preventDefault();
             checkPassword();
             return;
         }
 
-        // 封面还在 → 进入回忆
-        if (!cover.classList.contains('hidden')) {
+        if (cover && !cover.classList.contains('hidden')) {
             enterMemories();
         }
     });
@@ -257,75 +257,73 @@
     // 密码验证
     // ============================================
     function checkPassword() {
+        if (!passwordInput) return;
         const input = passwordInput.value.trim();
 
         if (!input) {
-            showPasswordError('请输入密码～');
+            showPasswordError('请输入通行密钥');
             return;
         }
 
         if (input !== appPassword) {
-            showPasswordError('密码不对哦，再试试～');
-            // 抖动效果
-            passwordInputGroup.classList.add('shake');
-            setTimeout(() => passwordInputGroup.classList.remove('shake'), 500);
+            showPasswordError('密钥校验失败');
+            passwordInputGroup?.classList.add('shake');
+            setTimeout(() => passwordInputGroup?.classList.remove('shake'), 500);
             passwordInput.value = '';
             passwordInput.focus();
             return;
         }
 
-        // 密码正确 → 记住到会话，隐藏密码页，显示封面
         sessionStorage.setItem('memories_unlocked', 'true');
         hidePasswordScreen();
     }
 
     function showPasswordError(msg) {
+        if (!passwordError) return;
         passwordError.textContent = msg;
         passwordError.classList.add('show');
-        setTimeout(() => passwordError.classList.remove('show'), 2000);
+        setTimeout(() => passwordError.classList.remove('show'), 2200);
     }
 
     function hidePasswordScreen() {
+        if (!passwordScreen) return;
         passwordScreen.classList.add('hidden');
-        // 密码页消失后聚焦封面
         setTimeout(() => {
-            passwordInput.value = '';
+            if (passwordInput) passwordInput.value = '';
         }, 600);
     }
 
-    // 密码提交按钮
-    passwordSubmit.addEventListener('click', checkPassword);
-
-    // 密码输入框实时清空错误
-    passwordInput.addEventListener('input', () => {
-        passwordError.classList.remove('show');
-    });
+    if (passwordSubmit) passwordSubmit.addEventListener('click', checkPassword);
+    if (passwordInput) {
+        passwordInput.addEventListener('input', () => passwordError?.classList.remove('show'));
+    }
 
     // ============================================
-    // 浮动光粒子（封面高级感）
+    // 复古粒子 & 指针聚光
     // ============================================
     function createParticles() {
-        const container = document.getElementById('particles');
+        const container = byId('particles');
         if (!container) return;
+        container.innerHTML = '';
 
-        const count = 30;
+        const count = window.matchMedia('(max-width: 768px)').matches ? 24 : 44;
         const fragment = document.createDocumentFragment();
 
         for (let i = 0; i < count; i++) {
             const particle = document.createElement('div');
             particle.classList.add('particle');
 
-            const size = Math.random() * 3 + 1.5;
+            const size = Math.random() * 3.2 + 1.2;
             const left = Math.random() * 100;
-            const delay = Math.random() * 10;
-            const duration = Math.random() * 8 + 8;
-            const baseOpacity = Math.random() * 0.4 + 0.15;
+            const delay = Math.random() * 11;
+            const duration = Math.random() * 10 + 9;
+            const baseOpacity = Math.random() * 0.48 + 0.12;
 
             particle.style.cssText = `
                 width: ${size}px;
                 height: ${size}px;
                 left: ${left}%;
-                bottom: -10px;
+                bottom: -12px;
                 animation-delay: ${delay}s;
                 animation-duration: ${duration}s;
                 opacity: ${baseOpacity};
@@ -337,45 +335,55 @@
         container.appendChild(fragment);
     }
 
+    function setupPointerGlow() {
+        const root = document.documentElement;
+        const update = (e) => {
+            const x = `${Math.round((e.clientX / window.innerWidth) * 100)}%`;
+            const y = `${Math.round((e.clientY / window.innerHeight) * 100)}%`;
+            root.style.setProperty('--pointer-x', x);
+            root.style.setProperty('--pointer-y', y);
+            if (cover) {
+                cover.style.setProperty('--cover-x', x);
+                cover.style.setProperty('--cover-y', y);
+            }
+        };
+        window.addEventListener('pointermove', update, { passive: true });
+    }
+
     // ============================================
     // 启动
     // ============================================
     async function init() {
+        document.documentElement.classList.add('is-loading');
+
         const data = await loadData();
-
-        // 创建浮动粒子
-        createParticles();
-
-        // 保存密码（从 data.json 读取）
         appPassword = data.password || '';
-
         memoriesData = data.memories || [];
 
+        createParticles();
+        setupPointerGlow();
         initCover(data);
         setupMusic(data);
         renderMemories(memoriesData);
 
-        // 如果没有设置密码，跳过密码页
-        if (!appPassword) {
+        if (!appPassword || sessionStorage.getItem('memories_unlocked') === 'true') {
             hidePasswordScreen();
         }
 
-        // 如果当前会话已经解锁过，直接跳过密码页
-        if (sessionStorage.getItem('memories_unlocked') === 'true') {
-            hidePasswordScreen();
-        }
-
-        // 如果 URL hash 是 #memories 且已解锁，直接进入
         if (window.location.hash === '#memories' && sessionStorage.getItem('memories_unlocked') === 'true') {
-            setTimeout(enterMemories, 300);
+            setTimeout(enterMemories, 260);
         }
+
+        requestAnimationFrame(() => {
+            document.documentElement.classList.remove('is-loading');
+            document.documentElement.classList.add('is-ready');
+        });
     }
 
-    // 启动应用
     init().catch(err => {
         console.error('初始化失败:', err);
-        // 降级：直接渲染空内容
         initCover({});
         renderMemories([]);
+        hidePasswordScreen();
     });
 })();
