@@ -14,7 +14,7 @@
     <section class="password-screen" id="password-screen">
         <div class="password-overlay"></div>
         <div class="password-card">
-            <div class="password-icon">🔒</div>
+            <div class="password-icon">🕯️</div>
             <h2 class="password-title">这是只属于我们的秘密</h2>
             <p class="password-hint">输入我们约定的密码，开启回忆</p>
             <div class="password-input-group">
@@ -36,7 +36,14 @@
 
     <!-- ========== 封面页 ========== -->
     <section class="cover" id="cover">
-        <div class="cover-overlay"></div>
+        <!-- 浮动光粒子 -->
+        <div class="particles-container" id="particles"></div>
+
+        <!-- 暗角 -->
+        <div class="cover-vignette"></div>
+
+        <!-- 中心光晕 -->
+        <div class="cover-spotlight"></div>
 
         <!-- 顶部胶片条 -->
         <div class="film-strip film-strip-top">
@@ -44,18 +51,31 @@
         </div>
 
         <div class="cover-content">
-            <!-- 装饰性引号 -->
-            <span class="cover-quote cover-quote-left">"</span>
+            <!-- 装饰 -->
+            <div class="cover-ornament">
+                <span class="ornament-line"></span>
+                <span class="ornament-star">✦</span>
+                <span class="ornament-line"></span>
+            </div>
 
+            <!-- 主标题 -->
             <h1 class="cover-title" id="cover-title"></h1>
+
+            <!-- 分割装饰 -->
+            <div class="cover-divider">
+                <span class="divider-dot">·</span>
+                <span class="divider-heart">♥</span>
+                <span class="divider-dot">·</span>
+            </div>
+
+            <!-- 副标题 -->
             <p class="cover-subtitle" id="cover-subtitle"></p>
 
-            <span class="cover-quote cover-quote-right">"</span>
-
-            <!-- 日期印章 -->
-            <div class="date-stamp">
-                <span class="stamp-text">Since</span>
-                <span class="stamp-year">2024</span>
+            <!-- 纪念日 -->
+            <div class="cover-since">
+                <span class="since-line"></span>
+                <span class="since-text">SINCE 2024</span>
+                <span class="since-line"></span>
             </div>
         </div>
 
@@ -66,11 +86,13 @@
 
         <!-- 进入按钮 -->
         <button class="enter-btn" id="enter-btn">
-            <span class="enter-btn-text">翻 开 回 忆</span>
-            <span class="enter-btn-icon">📷</span>
+            <span class="enter-btn-inner">
+                <span class="enter-btn-text">翻 开 回 忆</span>
+                <span class="enter-btn-arrow">→</span>
+            </span>
         </button>
 
-        <p class="cover-hint">点击进入，开启我们的故事</p>
+        <p class="cover-hint">轻触以上，开启时光</p>
     </section>
 
     <!-- ========== 主内容区 ========== -->

@@ -302,10 +302,49 @@
     });
 
     // ============================================
+    // 浮动光粒子（封面高级感）
+    // ============================================
+    function createParticles() {
+        const container = document.getElementById('particles');
+        if (!container) return;
+
+        const count = 30;
+        const fragment = document.createDocumentFragment();
+
+        for (let i = 0; i < count; i++) {
+            const particle = document.createElement('div');
+            particle.classList.add('particle');
+
+            const size = Math.random() * 3 + 1.5;
+            const left = Math.random() * 100;
+            const delay = Math.random() * 10;
+            const duration = Math.random() * 8 + 8;
+            const baseOpacity = Math.random() * 0.4 + 0.15;
+
+            particle.style.cssText = `
+                width: ${size}px;
+                height: ${size}px;
+                left: ${left}%;
+                bottom: -10px;
+                animation-delay: ${delay}s;
+                animation-duration: ${duration}s;
+                opacity: ${baseOpacity};
+            `;
+
+            fragment.appendChild(particle);
+        }
+
+        container.appendChild(fragment);
+    }
+
+    // ============================================
     // 启动
     // ============================================
     async function init() {
         const data = await loadData();
+
+        // 创建浮动粒子
+        createParticles();
 
         // 保存密码（从 data.json 读取）
         appPassword = data.password || '';
