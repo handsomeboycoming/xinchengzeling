@@ -1,0 +1,673 @@
+/* ============================================
+   复古胶片风回忆录 — 样式表
+   ============================================ */
+
+/* --- CSS 变量 (复古暖色系) --- */
+:root {
+    --cream: #faf3e6;
+    --paper: #f0e4d0;
+    --warm-tan: #c4956a;
+    --sepia: #8b7355;
+    --dark-brown: #4a3728;
+    --deep-brown: #2c1810;
+    --vintage-red: #c41e3a;
+    --faded-red: #a0524a;
+    --gold: #b8860b;
+    --dark-gold: #8b6914;
+    --shadow-soft: 0 4px 20px rgba(44, 24, 16, 0.10);
+    --shadow-card: 0 8px 32px rgba(44, 24, 16, 0.14);
+    --shadow-hover: 0 16px 40px rgba(44, 24, 16, 0.20);
+    --font-title: 'Ma Shan Zheng', 'STKaiti', 'KaiTi', cursive;
+    --font-body: 'Noto Serif SC', 'STSong', 'SimSun', 'Songti SC', serif;
+    --font-decorative: 'ZCOOL XiaoWei', 'STKaiti', 'KaiTi', serif;
+    --transition-slow: 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    --transition-medium: 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* --- 基础重置 --- */
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+    font-size: 16px;
+}
+
+body {
+    font-family: var(--font-body);
+    background-color: var(--paper);
+    color: var(--dark-brown);
+    line-height: 1.8;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* ============================================
+   胶片颗粒覆盖层 (SVG 噪点)
+   ============================================ */
+.film-grain {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 10000;
+    opacity: 0.05;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    background-repeat: repeat;
+    background-size: 200px 200px;
+    animation: grain-shift 0.5s steps(3) infinite;
+}
+
+@keyframes grain-shift {
+    0%, 100% { transform: translate(0, 0); }
+    33% { transform: translate(-1px, 1px); }
+    66% { transform: translate(1px, -1px); }
+}
+
+/* ============================================
+   封面页
+   ============================================ */
+.cover {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background:
+        radial-gradient(ellipse at 50% 40%, rgba(196, 149, 106, 0.25) 0%, transparent 70%),
+        radial-gradient(ellipse at 80% 20%, rgba(180, 130, 90, 0.15) 0%, transparent 50%),
+        linear-gradient(180deg, #f5e6d3 0%, #eed9c0 30%, #e8d0b0 60%, #f0dcc5 100%);
+    transition: transform var(--transition-slow), opacity var(--transition-slow);
+}
+
+.cover.hidden {
+    transform: translateY(-100%);
+    opacity: 0;
+    pointer-events: none;
+}
+
+.cover-overlay {
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(ellipse at 50% 50%, transparent 40%, rgba(44, 24, 16, 0.15) 100%);
+    pointer-events: none;
+}
+
+/* --- 胶片条 --- */
+.film-strip {
+    width: 90%;
+    max-width: 600px;
+    height: 28px;
+    position: relative;
+    background: linear-gradient(180deg, #3a2a1a 0%, #2c1810 50%, #3a2a1a 100%);
+    border-radius: 2px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+
+.sprocket-holes {
+    width: 100%;
+    height: 100%;
+    background-image:
+        repeating-linear-gradient(
+            90deg,
+            transparent,
+            transparent 18px,
+            #f0dcc5 18px,
+            #f0dcc5 22px,
+            transparent 22px,
+            transparent 40px
+        );
+    opacity: 0.7;
+}
+
+.film-strip-top {
+    margin-bottom: 20px;
+}
+
+.film-strip-bottom {
+    margin-top: 20px;
+}
+
+/* --- 封面文字 --- */
+.cover-content {
+    text-align: center;
+    position: relative;
+    padding: 20px 30px;
+}
+
+.cover-quote {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 6rem;
+    color: var(--warm-tan);
+    opacity: 0.3;
+    position: absolute;
+    line-height: 1;
+}
+
+.cover-quote-left {
+    top: -30px;
+    left: -20px;
+}
+
+.cover-quote-right {
+    bottom: -60px;
+    right: -20px;
+}
+
+.cover-title {
+    font-family: var(--font-title);
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    color: var(--deep-brown);
+    letter-spacing: 0.08em;
+    line-height: 1.5;
+    text-shadow: 2px 2px 0px rgba(196, 149, 106, 0.2);
+    animation: title-flicker 6s ease-in-out infinite;
+}
+
+@keyframes title-flicker {
+    0%, 100% { opacity: 1; }
+    92% { opacity: 1; }
+    93% { opacity: 0.85; }
+    94% { opacity: 1; }
+    96% { opacity: 0.9; }
+    97% { opacity: 1; }
+}
+
+.cover-subtitle {
+    font-family: var(--font-decorative);
+    font-size: clamp(1rem, 2vw, 1.4rem);
+    color: var(--sepia);
+    margin-top: 12px;
+    letter-spacing: 0.2em;
+}
+
+/* --- 日期印章 --- */
+.date-stamp {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 24px;
+    padding: 8px 16px;
+    border: 2px solid var(--faded-red);
+    border-radius: 50%;
+    color: var(--faded-red);
+    transform: rotate(-5deg);
+    opacity: 0.7;
+}
+
+.stamp-text {
+    font-size: 0.6rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+}
+
+.stamp-year {
+    font-family: var(--font-decorative);
+    font-size: 1.2rem;
+    font-weight: 700;
+}
+
+/* --- 进入按钮 --- */
+.enter-btn {
+    margin-top: 36px;
+    padding: 14px 40px;
+    background: linear-gradient(135deg, var(--deep-brown), var(--dark-brown));
+    color: var(--cream);
+    border: 2px solid var(--dark-brown);
+    font-family: var(--font-decorative);
+    font-size: 1.1rem;
+    letter-spacing: 0.3em;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: all var(--transition-medium);
+    box-shadow: var(--shadow-soft);
+}
+
+.enter-btn::before {
+    content: '';
+    position: absolute;
+    inset: 4px;
+    border: 1px solid rgba(250, 243, 230, 0.2);
+    pointer-events: none;
+}
+
+.enter-btn:hover {
+    background: linear-gradient(135deg, #3a2518, var(--deep-brown));
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-2px);
+}
+
+.enter-btn:active {
+    transform: translateY(0);
+}
+
+.enter-btn-text {
+    position: relative;
+    z-index: 1;
+}
+
+.enter-btn-icon {
+    margin-left: 8px;
+    position: relative;
+    z-index: 1;
+}
+
+/* --- 封面提示文字 --- */
+.cover-hint {
+    margin-top: 16px;
+    font-size: 0.8rem;
+    color: var(--sepia);
+    opacity: 0.6;
+    letter-spacing: 0.1em;
+    animation: hint-pulse 2s ease-in-out infinite;
+}
+
+@keyframes hint-pulse {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 0.8; }
+}
+
+/* ============================================
+   主内容区
+   ============================================ */
+.main-content {
+    min-height: 100vh;
+    padding-bottom: 80px;
+    opacity: 0;
+    transition: opacity 0.6s ease;
+}
+
+.main-content.visible {
+    opacity: 1;
+}
+
+/* ============================================
+   音乐播放器
+   ============================================ */
+.music-player {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 200;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 16px 8px 8px;
+    background: rgba(44, 24, 16, 0.85);
+    backdrop-filter: blur(10px);
+    border-radius: 30px;
+    border: 1px solid rgba(196, 149, 106, 0.3);
+    box-shadow: var(--shadow-soft);
+    transition: all var(--transition-medium);
+}
+
+.music-player:hover {
+    background: rgba(44, 24, 16, 0.95);
+    box-shadow: var(--shadow-hover);
+}
+
+.music-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid var(--warm-tan);
+    background: transparent;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    transition: all var(--transition-medium);
+    position: relative;
+}
+
+.music-btn:hover {
+    border-color: var(--cream);
+    background: rgba(250, 243, 230, 0.1);
+}
+
+.music-btn .music-note {
+    display: block;
+    transition: all var(--transition-medium);
+}
+
+.music-btn.playing .music-note {
+    animation: note-spin 2s linear infinite;
+}
+
+@keyframes note-spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.music-btn.paused .music-note {
+    animation: none;
+    opacity: 0.4;
+}
+
+.music-info {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.3;
+}
+
+.music-title {
+    font-family: var(--font-decorative);
+    font-size: 0.75rem;
+    color: var(--cream);
+    letter-spacing: 0.05em;
+}
+
+.music-artist {
+    font-size: 0.65rem;
+    color: var(--warm-tan);
+    opacity: 0.8;
+}
+
+/* ============================================
+   时间轴
+   ============================================ */
+.timeline {
+    position: relative;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 80px 20px 40px;
+}
+
+/* 时间轴中线 */
+.timeline-line {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 2px;
+    height: 100%;
+    background: linear-gradient(
+        180deg,
+        transparent 0%,
+        var(--warm-tan) 5%,
+        var(--warm-tan) 95%,
+        transparent 100%
+    );
+    z-index: 0;
+}
+
+/* ============================================
+   回忆卡片
+   ============================================ */
+.memory-card {
+    position: relative;
+    display: flex;
+    align-items: center;
+    margin-bottom: 100px;
+    opacity: 0;
+    transform: translateY(60px);
+    transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    z-index: 1;
+}
+
+.memory-card.revealed {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* 交替布局 */
+.memory-card:nth-child(odd) {
+    flex-direction: row;
+    padding-right: 50%;
+}
+
+.memory-card:nth-child(even) {
+    flex-direction: row-reverse;
+    padding-left: 50%;
+}
+
+/* 时间轴节点 */
+.memory-card::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 14px;
+    height: 14px;
+    background: var(--vintage-red);
+    border: 3px solid var(--cream);
+    border-radius: 50%;
+    z-index: 2;
+    box-shadow: 0 0 0 4px var(--warm-tan);
+}
+
+/* --- 照片容器 (拍立得风格) --- */
+.photo-wrapper {
+    flex-shrink: 0;
+    width: 260px;
+    background: #fffef9;
+    padding: 12px 12px 40px 12px;
+    box-shadow: var(--shadow-card);
+    transform: rotate(-2deg);
+    transition: all var(--transition-medium);
+    position: relative;
+}
+
+.memory-card:nth-child(even) .photo-wrapper {
+    transform: rotate(2deg);
+}
+
+.photo-wrapper:hover {
+    transform: rotate(0deg) scale(1.03);
+    box-shadow: var(--shadow-hover);
+    z-index: 5;
+}
+
+.photo-wrapper img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    display: block;
+    background: #e8d0b0;
+}
+
+/* 照片占位样式（图片未加载时） */
+.photo-placeholder {
+    width: 100%;
+    height: 200px;
+    background: linear-gradient(135deg, #e8d0b0, #dcc8a0, #e8d0b0);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    color: var(--sepia);
+}
+
+/* --- 文字区域 --- */
+.memory-text {
+    padding: 20px 30px;
+    flex: 1;
+}
+
+.memory-date {
+    font-family: var(--font-decorative);
+    font-size: 0.85rem;
+    color: var(--vintage-red);
+    letter-spacing: 0.15em;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.memory-date::before {
+    content: '📅';
+    font-size: 0.75rem;
+}
+
+.memory-caption {
+    font-family: var(--font-body);
+    font-size: 1rem;
+    color: var(--dark-brown);
+    line-height: 1.9;
+}
+
+/* --- 卡片间距调整 --- */
+.memory-card:nth-child(odd) .photo-wrapper {
+    margin-right: 30px;
+}
+
+.memory-card:nth-child(even) .photo-wrapper {
+    margin-left: 30px;
+}
+
+/* ============================================
+   页脚
+   ============================================ */
+.footer {
+    text-align: center;
+    padding: 60px 20px 40px;
+    position: relative;
+    z-index: 1;
+}
+
+.footer-divider {
+    width: 60px;
+    height: 2px;
+    background: var(--warm-tan);
+    margin: 0 auto 30px;
+    opacity: 0.5;
+}
+
+.footer-text {
+    font-size: 2rem;
+    animation: heart-beat 1.5s ease-in-out infinite;
+}
+
+@keyframes heart-beat {
+    0%, 100% { transform: scale(1); }
+    15% { transform: scale(1.15); }
+    30% { transform: scale(1); }
+    45% { transform: scale(1.1); }
+    60% { transform: scale(1); }
+}
+
+.footer-sub {
+    font-family: var(--font-decorative);
+    font-size: 0.95rem;
+    color: var(--sepia);
+    margin-top: 8px;
+    letter-spacing: 0.1em;
+}
+
+.footer-sub:last-child {
+    font-size: 0.7rem;
+    opacity: 0.5;
+    margin-top: 20px;
+}
+
+/* ============================================
+   响应式 — 移动端
+   ============================================ */
+@media (max-width: 768px) {
+    .cover-title {
+        font-size: 1.8rem;
+    }
+
+    .cover-subtitle {
+        font-size: 0.95rem;
+    }
+
+    .enter-btn {
+        padding: 12px 30px;
+        font-size: 1rem;
+    }
+
+    /* 时间轴左对齐 */
+    .timeline-line {
+        left: 24px;
+    }
+
+    .memory-card,
+    .memory-card:nth-child(odd),
+    .memory-card:nth-child(even) {
+        flex-direction: column;
+        padding: 0 0 0 50px;
+        margin-bottom: 60px;
+    }
+
+    .memory-card::before {
+        left: 24px;
+    }
+
+    .memory-card:nth-child(odd) .photo-wrapper,
+    .memory-card:nth-child(even) .photo-wrapper {
+        margin: 0 0 16px 0;
+        width: 100%;
+        max-width: 280px;
+    }
+
+    .memory-text {
+        padding: 10px 0;
+    }
+
+    .photo-wrapper img,
+    .photo-placeholder {
+        height: 180px;
+    }
+
+    /* 音乐播放器移到底部 */
+    .music-player {
+        top: auto;
+        bottom: 20px;
+        right: 10px;
+        padding: 6px 12px 6px 6px;
+    }
+
+    .music-btn {
+        width: 34px;
+        height: 34px;
+    }
+
+    .music-info {
+        display: none;
+    }
+
+    .cover-quote {
+        font-size: 3rem;
+    }
+}
+
+@media (max-width: 400px) {
+    .cover-title {
+        font-size: 1.5rem;
+    }
+
+    .memory-card,
+    .memory-card:nth-child(odd),
+    .memory-card:nth-child(even) {
+        padding-left: 40px;
+    }
+
+    .photo-wrapper img,
+    .photo-placeholder {
+        height: 150px;
+    }
+}
+
+/* ============================================
+   打印样式 (如果有人想打印留念)
+   ============================================ */
+@media print {
+    .film-grain,
+    .music-player,
+    .enter-btn,
+    .cover-hint,
+    .film-strip { display: none; }
+
+    .cover { position: relative; }
+    .main-content { opacity: 1; }
+}

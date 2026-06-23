@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我们的回忆录</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Serif+SC:wght@300;400;700&family=ZCOOL+XiaoWei&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- 胶片颗粒覆盖层 -->
+    <div class="film-grain"></div>
+
+    <!-- ========== 封面页 ========== -->
+    <section class="cover" id="cover">
+        <div class="cover-overlay"></div>
+
+        <!-- 顶部胶片条 -->
+        <div class="film-strip film-strip-top">
+            <div class="sprocket-holes"></div>
+        </div>
+
+        <div class="cover-content">
+            <!-- 装饰性引号 -->
+            <span class="cover-quote cover-quote-left">"</span>
+
+            <h1 class="cover-title" id="cover-title"></h1>
+            <p class="cover-subtitle" id="cover-subtitle"></p>
+
+            <span class="cover-quote cover-quote-right">"</span>
+
+            <!-- 日期印章 -->
+            <div class="date-stamp">
+                <span class="stamp-text">Since</span>
+                <span class="stamp-year">2024</span>
+            </div>
+        </div>
+
+        <!-- 底部胶片条 -->
+        <div class="film-strip film-strip-bottom">
+            <div class="sprocket-holes"></div>
+        </div>
+
+        <!-- 进入按钮 -->
+        <button class="enter-btn" id="enter-btn">
+            <span class="enter-btn-text">翻 开 回 忆</span>
+            <span class="enter-btn-icon">📷</span>
+        </button>
+
+        <p class="cover-hint">点击进入，开启我们的故事</p>
+    </section>
+
+    <!-- ========== 主内容区 ========== -->
+    <main class="main-content" id="main-content">
+        <!-- 音乐播放器 -->
+        <div class="music-player" id="music-player">
+            <button class="music-btn playing" id="music-toggle" title="暂停/播放音乐">
+                <span class="music-disc">💿</span>
+                <span class="music-note">🎵</span>
+            </button>
+            <div class="music-info" id="music-info">
+                <span class="music-title"></span>
+                <span class="music-artist"></span>
+            </div>
+        </div>
+
+        <!-- 回忆时间轴 -->
+        <section class="timeline" id="timeline">
+            <div class="timeline-line"></div>
+            <!-- 由 JS 动态生成 -->
+        </section>
+
+        <!-- 页脚 -->
+        <footer class="footer">
+            <div class="footer-divider"></div>
+            <p class="footer-text">❤️</p>
+            <p class="footer-sub">我们的故事，未完待续...</p>
+            <p class="footer-sub">添加新回忆：把照片放进 photos/ 文件夹，在 data.json 里新增一条记录即可</p>
+        </footer>
+    </main>
+
+    <!-- 背景音乐 -->
+    <audio id="bg-music" loop preload="auto"></audio>
+
+    <script src="script.js"></script>
+</body>
+</html>
