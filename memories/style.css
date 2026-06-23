@@ -17,9 +17,9 @@
     --shadow-soft: 0 4px 20px rgba(44, 24, 16, 0.10);
     --shadow-card: 0 8px 32px rgba(44, 24, 16, 0.14);
     --shadow-hover: 0 16px 40px rgba(44, 24, 16, 0.20);
-    --font-title: 'Ma Shan Zheng', 'STKaiti', 'KaiTi', cursive;
-    --font-body: 'Noto Serif SC', 'STSong', 'SimSun', 'Songti SC', serif;
-    --font-decorative: 'ZCOOL XiaoWei', 'STKaiti', 'KaiTi', serif;
+    --font-title: 'KaiTi', 'STKaiti', '楷体', cursive;
+    --font-body: 'Songti SC', 'STSong', '宋体', 'SimSun', serif;
+    --font-decorative: 'KaiTi', 'STKaiti', '楷体', serif;
     --transition-slow: 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     --transition-medium: 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
