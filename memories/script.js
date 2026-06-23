@@ -299,37 +299,39 @@
     }
 
     // ============================================
-    // 复古粒子 & 指针聚光
+    // 浪漫花瓣粒子
     // ============================================
     function createParticles() {
-        const container = byId('particles');
+        const container = byId('petals');
         if (!container) return;
         container.innerHTML = '';
 
-        const count = window.matchMedia('(max-width: 768px)').matches ? 24 : 44;
+        const petals = ['🌸', '💕', '♥', '✿', '💗', '🌷', '✨', '🩷'];
+        const count = window.matchMedia('(max-width: 768px)').matches ? 18 : 32;
         const fragment = document.createDocumentFragment();
 
         for (let i = 0; i < count; i++) {
-            const particle = document.createElement('div');
-            particle.classList.add('particle');
+            const petal = document.createElement('div');
+            petal.classList.add('petal');
 
-            const size = Math.random() * 3.2 + 1.2;
+            const emoji = petals[Math.floor(Math.random() * petals.length)];
+            const size = (Math.random() * 0.8 + 0.6).toFixed(1);
             const left = Math.random() * 100;
-            const delay = Math.random() * 11;
-            const duration = Math.random() * 10 + 9;
-            const baseOpacity = Math.random() * 0.48 + 0.12;
+            const delay = Math.random() * 12;
+            const duration = Math.random() * 10 + 10;
+            const opacity = (Math.random() * 0.5 + 0.3).toFixed(2);
 
-            particle.style.cssText = `
-                width: ${size}px;
-                height: ${size}px;
+            petal.textContent = emoji;
+            petal.style.cssText = `
+                font-size: ${size}rem;
                 left: ${left}%;
-                bottom: -12px;
+                top: -20px;
                 animation-delay: ${delay}s;
                 animation-duration: ${duration}s;
-                opacity: ${baseOpacity};
+                opacity: ${opacity};
             `;
 
-            fragment.appendChild(particle);
+            fragment.appendChild(petal);
         }
 
         container.appendChild(fragment);

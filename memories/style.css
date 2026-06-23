@@ -2,21 +2,24 @@
    复古胶片风回忆录 — 样式表
    ============================================ */
 
-/* --- CSS 变量 (复古暖色系) --- */
+/* --- CSS 变量 (浪漫粉色系) --- */
 :root {
-    --cream: #faf3e6;
-    --paper: #f0e4d0;
-    --warm-tan: #c4956a;
-    --sepia: #8b7355;
-    --dark-brown: #4a3728;
-    --deep-brown: #2c1810;
-    --vintage-red: #c41e3a;
-    --faded-red: #a0524a;
-    --gold: #b8860b;
-    --dark-gold: #8b6914;
-    --shadow-soft: 0 4px 20px rgba(44, 24, 16, 0.10);
-    --shadow-card: 0 8px 32px rgba(44, 24, 16, 0.14);
-    --shadow-hover: 0 16px 40px rgba(44, 24, 16, 0.20);
+    --cream: #fff5f5;
+    --paper: #fff0f0;
+    --warm-tan: #e8a0a0;
+    --sepia: #c97a7a;
+    --dark-brown: #7a4040;
+    --deep-brown: #5c2d2d;
+    --vintage-red: #e85d6d;
+    --faded-red: #d4737c;
+    --gold: #e8988a;
+    --dark-gold: #c97a6e;
+    --pink-light: #ffe0e5;
+    --pink-soft: #ffd4da;
+    --rose: #e8919b;
+    --shadow-soft: 0 4px 20px rgba(120, 40, 40, 0.08);
+    --shadow-card: 0 8px 32px rgba(120, 40, 40, 0.12);
+    --shadow-hover: 0 16px 40px rgba(120, 40, 40, 0.18);
     --font-title: 'KaiTi', 'STKaiti', '楷体', cursive;
     --font-body: 'Songti SC', 'STSong', '宋体', 'SimSun', serif;
     --font-decorative: 'KaiTi', 'STKaiti', '楷体', serif;
@@ -77,8 +80,8 @@ body {
     align-items: center;
     justify-content: center;
     background:
-        radial-gradient(ellipse at 50% 40%, rgba(196, 149, 106, 0.2) 0%, transparent 70%),
-        linear-gradient(180deg, #f5e6d3 0%, #eed9c0 50%, #e8d0b0 100%);
+        radial-gradient(ellipse at 50% 40%, rgba(255, 182, 170, 0.2) 0%, transparent 70%),
+        linear-gradient(180deg, #fff0ee 0%, #ffe8e5 50%, #fff2f0 100%);
     transition: opacity 0.6s ease, transform 0.6s ease;
 }
 
@@ -223,7 +226,7 @@ body {
 }
 
 /* ============================================
-   封面页 — 高级电影感
+   封面页 — 浪漫花瓣雨
    ============================================ */
 .cover {
     position: fixed;
@@ -234,10 +237,10 @@ body {
     align-items: center;
     justify-content: center;
     background:
-        radial-gradient(ellipse at 50% 30%, rgba(196, 149, 106, 0.12) 0%, transparent 60%),
-        radial-gradient(ellipse at 30% 70%, rgba(139, 90, 60, 0.08) 0%, transparent 50%),
-        radial-gradient(ellipse at 80% 60%, rgba(180, 130, 90, 0.06) 0%, transparent 50%),
-        linear-gradient(180deg, #1a1008 0%, #1f1409 30%, #1c1108 60%, #1a0f07 100%);
+        radial-gradient(ellipse at 50% 20%, rgba(255, 182, 170, 0.25) 0%, transparent 55%),
+        radial-gradient(ellipse at 25% 65%, rgba(255, 160, 150, 0.12) 0%, transparent 45%),
+        radial-gradient(ellipse at 75% 55%, rgba(255, 175, 165, 0.12) 0%, transparent 45%),
+        linear-gradient(180deg, #fff0ee 0%, #ffe8e5 25%, #fff2f0 50%, #ffece8 75%, #fff0ee 100%);
     transition: transform 0.9s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.9s cubic-bezier(0.4, 0, 0.2, 1);
     overflow: hidden;
 }
@@ -248,35 +251,35 @@ body {
     pointer-events: none;
 }
 
-/* --- 中心光晕 --- */
-.cover-spotlight {
+/* --- 柔光 --- */
+.cover-glow {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: min(600px, 90vw);
-    height: min(700px, 80vh);
-    background: radial-gradient(ellipse at center, rgba(201, 169, 110, 0.10) 0%, rgba(180, 140, 80, 0.04) 40%, transparent 70%);
+    width: min(500px, 85vw);
+    height: min(600px, 75vh);
+    background: radial-gradient(ellipse at center, rgba(255, 200, 190, 0.25) 0%, rgba(255, 180, 170, 0.08) 45%, transparent 70%);
     pointer-events: none;
-    animation: spotlight-breathe 4s ease-in-out infinite;
+    animation: glow-breathe 4s ease-in-out infinite;
 }
 
-@keyframes spotlight-breathe {
-    0%, 100% { opacity: 0.8; transform: translate(-50%, -50%) scale(1); }
-    50% { opacity: 1; transform: translate(-50%, -50%) scale(1.06); }
+@keyframes glow-breathe {
+    0%, 100% { opacity: 0.7; transform: translate(-50%, -50%) scale(1); }
+    50% { opacity: 1; transform: translate(-50%, -50%) scale(1.08); }
 }
 
-/* --- 暗角 --- */
+/* --- 暗角(轻) --- */
 .cover-vignette {
     position: absolute;
     inset: 0;
-    background: radial-gradient(ellipse at center, transparent 50%, rgba(0, 0, 0, 0.5) 100%);
+    background: radial-gradient(ellipse at center, transparent 55%, rgba(180, 120, 120, 0.12) 100%);
     pointer-events: none;
     z-index: 1;
 }
 
-/* --- 浮动光粒子 --- */
-.particles-container {
+/* --- 花瓣容器 --- */
+.petals-container {
     position: absolute;
     inset: 0;
     pointer-events: none;
@@ -284,64 +287,28 @@ body {
     overflow: hidden;
 }
 
-.particle {
+.petal {
     position: absolute;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(220, 190, 140, 0.9) 0%, rgba(200, 160, 100, 0) 100%);
-    animation: float-up linear infinite;
+    font-size: 1.2rem;
+    animation: petal-fall linear infinite;
+    filter: blur(0.5px);
 }
 
-@keyframes float-up {
+@keyframes petal-fall {
     0% {
-        transform: translateY(0) translateX(0) scale(1);
+        transform: translateY(-10vh) translateX(0) rotate(0deg) scale(0.8);
         opacity: 0;
     }
-    10% {
-        opacity: 1;
+    8% {
+        opacity: 0.85;
     }
-    60% {
-        opacity: 0.6;
+    70% {
+        opacity: 0.5;
     }
     100% {
-        transform: translateY(-100vh) translateX(40px) scale(0.3);
+        transform: translateY(105vh) translateX(60px) rotate(360deg) scale(0.4);
         opacity: 0;
     }
-}
-
-/* --- 胶片条 --- */
-.film-strip {
-    width: min(85%, 500px);
-    height: 32px;
-    position: relative;
-    z-index: 2;
-    background: linear-gradient(180deg, #2a1a0c 0%, #1a0f06 40%, #2a1a0c 100%);
-    border-radius: 2px;
-    box-shadow:
-        0 4px 20px rgba(0, 0, 0, 0.5),
-        inset 0 1px 0 rgba(255, 255, 255, 0.03);
-}
-
-.sprocket-holes {
-    width: 100%;
-    height: 100%;
-    background-image:
-        repeating-linear-gradient(
-            90deg,
-            transparent,
-            transparent 16px,
-            rgba(20, 12, 6, 0.8) 16px,
-            rgba(20, 12, 6, 0.8) 20px,
-            transparent 20px,
-            transparent 36px
-        );
-}
-
-.film-strip-top {
-    margin-bottom: 12px;
-}
-
-.film-strip-bottom {
-    margin-top: 12px;
 }
 
 /* --- 封面文字 --- */
@@ -358,45 +325,38 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 12px;
-    margin-bottom: 28px;
+    margin-bottom: 24px;
 }
 
-.ornament-line {
-    display: block;
-    width: 40px;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(201, 169, 110, 0.5), transparent);
+.ornament-flower {
+    font-size: 2rem;
+    animation: flower-float 3s ease-in-out infinite;
+    filter: drop-shadow(0 0 8px rgba(255, 150, 150, 0.3));
 }
 
-.ornament-star {
-    color: #c9a96e;
-    font-size: 0.7rem;
-    animation: star-twinkle 2s ease-in-out infinite;
-}
-
-@keyframes star-twinkle {
-    0%, 100% { opacity: 0.4; }
-    50% { opacity: 1; }
+@keyframes flower-float {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    25% { transform: translateY(-4px) rotate(5deg); }
+    75% { transform: translateY(2px) rotate(-5deg); }
 }
 
 /* 主标题 */
 .cover-title {
     font-family: var(--font-title);
-    font-size: clamp(2rem, 5vw, 3.2rem);
-    color: #f0dfc0;
-    letter-spacing: 0.1em;
-    line-height: 1.6;
+    font-size: clamp(2.4rem, 6vw, 4rem);
+    color: #c9485e;
+    letter-spacing: 0.15em;
+    line-height: 1.5;
     text-shadow:
-        0 0 40px rgba(200, 160, 100, 0.25),
-        0 2px 4px rgba(0, 0, 0, 0.5);
-    animation: title-glow 4s ease-in-out infinite;
+        0 0 30px rgba(220, 100, 120, 0.2),
+        0 1px 3px rgba(180, 60, 80, 0.15);
+    animation: title-romantic 4s ease-in-out infinite;
     margin: 0;
 }
 
-@keyframes title-glow {
-    0%, 100% { text-shadow: 0 0 40px rgba(200, 160, 100, 0.25), 0 2px 4px rgba(0,0,0,0.5); }
-    50% { text-shadow: 0 0 60px rgba(220, 180, 120, 0.40), 0 2px 4px rgba(0,0,0,0.5); }
+@keyframes title-romantic {
+    0%, 100% { text-shadow: 0 0 30px rgba(220, 100, 120, 0.2), 0 1px 3px rgba(180, 60, 80, 0.15); }
+    50% { text-shadow: 0 0 50px rgba(240, 130, 150, 0.35), 0 1px 3px rgba(180, 60, 80, 0.15); }
 }
 
 /* 分割装饰 */
@@ -404,33 +364,31 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 16px;
-    margin: 20px 0;
-}
-
-.divider-dot {
-    color: rgba(201, 169, 110, 0.5);
-    font-size: 0.5rem;
+    margin: 18px 0;
 }
 
 .divider-heart {
-    color: #c9a96e;
-    font-size: 0.85rem;
-    animation: heart-glow 1.5s ease-in-out infinite;
+    color: #e85d6d;
+    font-size: 1.1rem;
+    animation: heart-beat-cover 1.2s ease-in-out infinite;
+    filter: drop-shadow(0 0 6px rgba(232, 93, 109, 0.3));
 }
 
-@keyframes heart-glow {
-    0%, 100% { opacity: 0.5; transform: scale(1); }
-    50% { opacity: 1; transform: scale(1.2); }
+@keyframes heart-beat-cover {
+    0%, 100% { opacity: 0.7; transform: scale(1); }
+    15% { opacity: 1; transform: scale(1.25); }
+    30% { opacity: 0.8; transform: scale(1); }
+    45% { opacity: 1; transform: scale(1.15); }
+    60% { opacity: 0.8; transform: scale(1); }
 }
 
 /* 副标题 */
 .cover-subtitle {
     font-family: var(--font-decorative);
-    font-size: clamp(0.9rem, 1.8vw, 1.15rem);
-    color: rgba(200, 170, 120, 0.8);
+    font-size: clamp(0.95rem, 1.8vw, 1.2rem);
+    color: rgba(180, 90, 100, 0.75);
     margin: 0 auto;
-    letter-spacing: 0.25em;
+    letter-spacing: 0.22em;
 }
 
 /* 纪念日 */
@@ -438,22 +396,20 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 14px;
+    gap: 8px;
     margin-top: 28px;
 }
 
-.since-line {
-    display: block;
-    width: 30px;
-    height: 1px;
-    background: rgba(201, 169, 110, 0.35);
+.since-icon {
+    font-size: 1rem;
+    animation: heart-beat-cover 2s ease-in-out infinite;
 }
 
 .since-text {
     font-family: var(--font-decorative);
-    font-size: 0.7rem;
-    letter-spacing: 0.35em;
-    color: rgba(180, 150, 110, 0.6);
+    font-size: 0.72rem;
+    letter-spacing: 0.3em;
+    color: rgba(180, 110, 120, 0.55);
 }
 
 /* --- 进入按钮 --- */
@@ -461,27 +417,20 @@ body {
     position: relative;
     z-index: 3;
     margin-top: 28px;
-    padding: 16px 48px;
-    background: transparent;
-    color: #d4b87a;
-    border: 1.5px solid rgba(200, 160, 100, 0.4);
+    padding: 15px 44px;
+    background: linear-gradient(135deg, #e8919b, #d4737c);
+    color: #fff;
+    border: none;
     font-family: var(--font-decorative);
-    font-size: 1rem;
-    letter-spacing: 0.3em;
+    font-size: 1.05rem;
+    letter-spacing: 0.25em;
     cursor: pointer;
-    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-    position: relative;
+    border-radius: 50px;
+    box-shadow:
+        0 6px 24px rgba(220, 120, 140, 0.3),
+        0 2px 8px rgba(200, 100, 120, 0.15);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     overflow: hidden;
-    border-radius: 2px;
-}
-
-.enter-btn::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(135deg, rgba(200, 160, 100, 0.08), rgba(180, 130, 80, 0.03));
-    opacity: 0;
-    transition: opacity 0.5s ease;
 }
 
 .enter-btn::after {
@@ -491,52 +440,41 @@ body {
     left: 50%;
     width: 0;
     height: 0;
-    background: rgba(220, 190, 140, 0.08);
+    background: rgba(255, 255, 255, 0.2);
     border-radius: 50%;
     transform: translate(-50%, -50%);
     transition: width 0.6s ease, height 0.6s ease;
 }
 
 .enter-btn:hover {
-    border-color: rgba(220, 180, 120, 0.7);
-    color: #e8d5b0;
-    text-shadow: 0 0 20px rgba(200, 160, 100, 0.3);
+    background: linear-gradient(135deg, #ed9fa8, #df8b93);
     box-shadow:
-        0 0 30px rgba(200, 160, 100, 0.1),
-        inset 0 0 30px rgba(200, 160, 100, 0.03);
-    transform: translateY(-1px);
-}
-
-.enter-btn:hover::before {
-    opacity: 1;
+        0 8px 30px rgba(220, 120, 140, 0.4),
+        0 3px 12px rgba(200, 100, 120, 0.2);
+    transform: translateY(-2px);
 }
 
 .enter-btn:hover::after {
-    width: 400px;
-    height: 400px;
+    width: 350px;
+    height: 350px;
 }
 
 .enter-btn:active {
-    transform: translateY(0);
+    transform: translateY(0) scale(0.97);
     transition: transform 0.1s ease;
 }
 
-.enter-btn-inner {
+.enter-btn-text {
     position: relative;
     z-index: 1;
-    display: flex;
-    align-items: center;
-    gap: 12px;
 }
 
-.enter-btn-arrow {
-    display: inline-block;
-    transition: transform 0.3s ease;
-    font-size: 1.1rem;
-}
-
-.enter-btn:hover .enter-btn-arrow {
-    transform: translateX(4px);
+.enter-btn-heart {
+    position: relative;
+    z-index: 1;
+    margin-left: 8px;
+    font-size: 1rem;
+    animation: heart-beat-cover 1.5s ease-in-out infinite;
 }
 
 /* --- 封面提示 --- */
@@ -546,65 +484,59 @@ body {
     margin-top: 18px;
     font-family: var(--font-body);
     font-size: 0.7rem;
-    color: rgba(180, 150, 110, 0.4);
-    letter-spacing: 0.15em;
+    color: rgba(180, 120, 130, 0.45);
+    letter-spacing: 0.12em;
     animation: hint-fade 2.5s ease-in-out infinite;
 }
 
 @keyframes hint-fade {
-    0%, 100% { opacity: 0.3; }
-    50% { opacity: 0.7; }
+    0%, 100% { opacity: 0.35; }
+    50% { opacity: 0.75; }
 }
 
 /* ============================================
-   密码锁屏跟随封面风格
+   密码锁屏 — 浪漫风格
    ============================================ */
-.password-screen {
-    background:
-        radial-gradient(ellipse at 50% 40%, rgba(196, 149, 106, 0.08) 0%, transparent 60%),
-        linear-gradient(180deg, #1a1008 0%, #1f1409 50%, #1c1108 100%);
-}
-
 .password-card {
-    color: #f0dfc0;
+    color: var(--dark-brown);
 }
 
 .password-title {
-    color: #e0d0b0;
+    color: #c9485e;
 }
 
 .password-hint {
-    color: rgba(200, 170, 120, 0.7);
+    color: rgba(180, 90, 100, 0.7);
 }
 
 .password-input-group {
-    background: rgba(255, 255, 255, 0.06);
-    border-color: rgba(200, 160, 100, 0.3);
+    background: rgba(255, 240, 240, 0.7);
+    border-color: rgba(220, 140, 150, 0.35);
 }
 
 .password-input-group:focus-within {
-    border-color: rgba(220, 180, 120, 0.6);
-    box-shadow: 0 0 30px rgba(200, 160, 100, 0.1);
+    border-color: rgba(220, 120, 140, 0.6);
+    box-shadow: 0 0 30px rgba(240, 150, 160, 0.15);
 }
 
 .password-input {
-    color: #f0dfc0;
+    color: #7a4040;
 }
 
 .password-input::placeholder {
-    color: rgba(180, 150, 110, 0.4);
+    color: rgba(180, 110, 120, 0.4);
 }
 
 .password-submit {
-    background: linear-gradient(135deg, rgba(200, 160, 100, 0.3), rgba(160, 120, 70, 0.2));
+    background: linear-gradient(135deg, #e8919b, #d4737c);
 }
 
 .password-submit:hover {
-    background: linear-gradient(135deg, rgba(220, 180, 120, 0.4), rgba(180, 140, 90, 0.3));
+    background: linear-gradient(135deg, #ed9fa8, #df8b93);
 }
 
 .password-error {
-    color: #d4756b;
+    color: #e85d6d;
 }
 
 /* ============================================
@@ -633,16 +565,16 @@ body {
     align-items: center;
     gap: 10px;
     padding: 8px 16px 8px 8px;
-    background: rgba(44, 24, 16, 0.85);
+    background: rgba(255, 240, 240, 0.85);
     backdrop-filter: blur(10px);
     border-radius: 30px;
-    border: 1px solid rgba(196, 149, 106, 0.3);
+    border: 1px solid rgba(220, 150, 160, 0.3);
     box-shadow: var(--shadow-soft);
     transition: all var(--transition-medium);
 }
 
 .music-player:hover {
-    background: rgba(44, 24, 16, 0.95);
+    background: rgba(255, 235, 235, 0.95);
     box-shadow: var(--shadow-hover);
 }
 
@@ -650,7 +582,7 @@ body {
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    border: 2px solid var(--warm-tan);
+    border: 2px solid rgba(220, 140, 150, 0.5);
     background: transparent;
     cursor: pointer;
     display: flex;
@@ -662,8 +594,8 @@ body {
 }
 
 .music-btn:hover {
-    border-color: var(--cream);
-    background: rgba(250, 243, 230, 0.1);
+    border-color: #e8919b;
+    background: rgba(232, 145, 155, 0.08);
 }
 
 .music-btn .music-note {
@@ -694,13 +626,13 @@ body {
 .music-title {
     font-family: var(--font-decorative);
     font-size: 0.75rem;
-    color: var(--cream);
+    color: #7a4040;
     letter-spacing: 0.05em;
 }
 
 .music-artist {
     font-size: 0.65rem;
-    color: var(--warm-tan);
+    color: #c97a7a;
     opacity: 0.8;
 }
 
@@ -908,31 +840,26 @@ body {
    ============================================ */
 @media (max-width: 768px) {
     .cover-title {
-        font-size: 1.7rem;
+        font-size: 2rem;
     }
 
     .cover-subtitle {
         font-size: 0.85rem;
     }
 
-    .cover-spotlight {
-        width: 90vw;
-        height: 60vh;
+    .cover-glow {
+        width: 85vw;
+        height: 55vh;
     }
 
     .enter-btn {
-        padding: 14px 36px;
+        padding: 14px 34px;
         font-size: 0.9rem;
     }
 
-    .film-strip {
-        width: 90%;
-        height: 24px;
-    }
-
-    .cover-ornament { margin-bottom: 20px; }
-    .cover-divider { margin: 16px 0; }
-    .cover-since { margin-top: 22px; }
+    .cover-ornament { margin-bottom: 18px; }
+    .cover-divider { margin: 14px 0; }
+    .cover-since { margin-top: 20px; }
 
     /* 时间轴左对齐 */
     .timeline-line {
@@ -991,7 +918,7 @@ body {
 
 @media (max-width: 400px) {
     .cover-title {
-        font-size: 1.4rem;
+        font-size: 1.6rem;
     }
 
     .cover-content {
@@ -999,15 +926,13 @@ body {
     }
 
     .enter-btn {
-        padding: 12px 30px;
+        padding: 12px 28px;
         font-size: 0.85rem;
     }
 
-    .cover-ornament { gap: 8px; margin-bottom: 16px; }
-    .ornament-line { width: 25px; }
-    .cover-divider { margin: 12px 0; gap: 10px; }
-    .cover-since { margin-top: 18px; gap: 10px; }
-    .since-line { width: 20px; }
+    .cover-ornament { margin-bottom: 14px; }
+    .cover-divider { margin: 10px 0; }
+    .cover-since { margin-top: 16px; }
 
     .memory-card,
     .memory-card:nth-child(odd),
